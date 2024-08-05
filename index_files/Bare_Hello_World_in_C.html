@@ -1,0 +1,592 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+	<title>Bare Hello World in C</title>
+	<meta name="generator" content="Zim 0.75.2">
+	<meta name="viewport" content="width=device-width">
+	<!-- <link href='http://fonts.googleapis.com/css?family=Open+Sans:300&subset=latin,greek,latin-ext' rel='stylesheet' type='text/css'> -->
+	<![if !IE]>
+	<!-- comment out for IE since it spams the user with warnings -->
+	<script type='text/javascript' src='http://code.jquery.com/jquery-1.7.1.js'></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+	<script type='text/javascript'>
+		$(window).load(function(){$("#navigation").height( $("#content").height()+65 );});
+	</script>
+    <script>hljs.highlightAll();</script>
+	<![endif]>
+	<style>
+		body, html {
+			height:100%;
+			font-family:'Open Sans', sans-serif;
+			line-height:1.5em;
+			font-weight:300;
+			background-color:#FAFAFA;
+			text-rendering:geometricPrecision;
+			margin:0;
+			padding:0;
+		}
+		.wrapper {
+			height:100%;
+			position:relative;
+		}
+		#navigation {
+			background-color:#F3F3F3;
+			display:inline-block;
+			border-right:1px solid #EAEAEA;
+			padding-right:65px;
+			padding-top:65px;
+			padding-left:25px;
+			position:relative;
+			float:left;
+			min-height:100%;
+		}
+		#header {
+			background-color:#EAEAEA;
+		}
+        #header h2 {
+            margin: auto;
+            padding: 1em;
+        }
+		#content {
+			float:left;
+			display:inline-block;
+			position:absolute;
+			max-width:960px;
+			padding:65px;
+		}
+		#navigation ul {
+			margin-top:0;
+			margin-bottom:0;
+			padding-left:40px;
+		}
+		#navigation li {
+			list-style-type:none;
+		}
+		#navigation a {
+			text-decoration:none;
+			color:gray;
+		}
+		#navigation strong {
+			color:#4E9A06;
+			font-weight:400;
+		}
+		#navigation a:hover {
+			text-decoration:underline;
+		}
+		#content h1:nth-child(1) {
+            /*
+			margin-top:0;
+			margin-bottom:0;
+            */
+		}
+		h1,h2,h3,h4,h5,h6 {
+			color:#4E9A06;
+			font-weight:300;
+            /*
+			margin-top:0;
+			margin-bottom:0;
+            */
+		}
+		p {
+			margin-top:0;
+			margin-bottom:0;
+		}
+		#content a {
+			color:#CE5C00;
+		}
+		#content a {
+			text-decoration: none;
+		}
+		#content a:hover {
+			text-decoration: underline;
+		}
+		#content a:active {
+			text-decoration: underline;
+		}
+		#content strike {
+			color: grey;
+		}
+		#content u {
+			text-decoration: none;
+			background-color: yellow;
+		}
+		#content tt {
+			color: #2e3436;
+		}
+		#content pre {
+			color: #2e3436;
+			margin-left: 0px;
+			margin-top: 0;
+			margin-bottom: 0;
+            white-space: pre-wrap;
+		}
+		.backlinks {
+			color:gray;
+		}
+		hr.footnotes {
+			width: 20%;
+			margin-left: 0;
+		}
+		@media print{
+			#navigation{
+				background-color:#FFF;
+			}
+		}
+
+		span.zim-tag {
+			color: #ce5c00;
+		}
+		div.zim-object {
+			border-style:solid;
+			border-width:1px;
+		}
+
+		.checked-box {list-style-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAAXNSR0IArs4c6QAAAAZiS0dEAP8A/wD/oL2nkwAAAAlwSFlzAAANOgAADMQBiN+4gQAAAAd0SU1FB9gKGQ8sMEGsKGkAAAAZdEVYdENvbW1lbnQAQ3JlYXRlZCB3aXRoIEdJTVBXgQ4XAAAEBUlEQVRIx62V22tdRRTGf7Nn73P2ybntnNOe3NqkPTGgLTVUUZF6QatSLOKTPgqCIqLgQ0H/A1sQQbBYCBb1QfAxiC8tSO1FqHkwJVKtjdTGNraUmObsc9nXmfGh7cGYpM1D5nHWzPetteZb3wg2eB2YqYm4zSadsMtoboiNBH/3TE0awx6j+MRoxoTg/IYRvP19TQrJS0bzhdHGSyKFkLTtjSKwMjyiEz43ynhtP6bdjBCWyFobAf7eT7VhNF/q1FRbjYjmUohlCVPwnB+6FUxMTJipqSmUUhhjEGKd3bMT4ks/Y6oLBK2Yth8hHYtCJXOix7Nf7xLMzc0xOzvLzp078TyPNE3viW3QJPXzhNWbxFFKHCmMhoLn/FHodd48vGfhapdAacXQlkFK5dL6wIUm6fuTZPuvqDQhaMUYYyiVyuQr6rXDexYuAdi3tSv1ZJNs/R/CaszzT+1na88uXFnCEnJVgivBNN8uTJKmHQI/ptOOcXNZzMz9mOqFs90OHpipWcYwlo5P4ebnuOkrvr5wgrH+h3im7y36MzuwRXYZeKha/OhP0EkadFoxQSdGSotedR/+XwMc2XvKdNUFOFqZx6LKZWIiwjgkikNmLp/hm8sH+K1zjFTHXfBYdTi+eJArzXM0GxFxoBDCopLvo/fqEwi1XPkWkGqjFo2TgB1jOYZUKZTS/D1/ncmLh7jon0IbRWoiTi59ymzzJEEQE3cStNZsGxqlfPE57MBbOR8fP3hDGalOO9fq2DlBvmZw8xa2IxACGn6TydlD/O6f5OzSV/zif0cYhLQaEXGkKBbz7Ov/AOlXV1cxgBJRI3fuSTrpTawt18kWIZN1CFuaONI0w0WOXfsI43YIggh/KUSlhqxrMz74AkOZcWBm9QkH+Gw8NDLuITi+m0yzhluSyJzBLcpblUhFxywSRAEtPwQjsKVN30CNh0uvYuOubSHLtN3J0TO1j0pmBNuFbFWRK0gyPRZpktL2I5JQkclKakNlnh54g6ocvevUr/Ai2a7wineEkcJupA3S1Wg0nVZM2E6wbEF5U5G9Q++wI7sfR7h3N8HVNstykBfzH+KJEZwiWD0aIwxCgJ0R1Mu7GXOeJSuK93bZtQIle4D9pUNU5DC5jEsu55AvZakM5NicGyEj8uuz8bUCQgj67QfY671P3vEoeC69gy695U1U7NG7XV0pUwBjDJa1/JJlWWxzHuflzQe5FJ/GsgUVuZ2t8lEkTvfc0aNHb72flBhjVicQQqCUuvM3/M+WDVguWBrMVdDXEGZlBVEUrVCU9d9s5+fnaTQa2PZyPxEIhJaI1EEoZwX4ncynp6fXrmB4eJjR0VFarRbNZnP9P9rt9gohqNVq1Ov1ZbF/AZGev3hLJ2/zAAAAAElFTkSuQmCC)}
+		.xchecked-box {list-style-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAAXNSR0IArs4c6QAAAAZiS0dEAP8A/wD/oL2nkwAAAAlwSFlzAAANOgAADMQBiN+4gQAAAAd0SU1FB9gKGQ8bDYnDxEwAAAAZdEVYdENvbW1lbnQAQ3JlYXRlZCB3aXRoIEdJTVBXgQ4XAAAEK0lEQVRIx9WVS2hTWRjHf/eR3CY1nbxMH2YiZRQS6qO13YlMVxY3SnVcuNIBFezGpSADLoQqLu1sHJCqdCFSXFpw4YOCSH3BtFqttTNamabX3DS5bfO6uffMoglja3RGcDMHzuac7/z/53++//cd+L8P6VuCPQYZ8ADNgBd4J31DcDcQs+GnHByRocEDv0kfBSjAOlYCs11Q+gpwDegS8LMJ+3QIK0ATzEhV8Odnz5bzw8P4dJ25aJQ/WlvJ1df/K7hSLtOcTNI+Pk69rpMTgqIQhCDvh1/VSpw79+gRrRMTmLZNezLJJsPg+a5dmOEwQlFqg1sWG16/Jv7sGWXDwBACFQjC9HcwIMONKkGp4PGAJGEDS0IQmZlhnWnye3c3eiyGo6qr3WHbrJ+dJf7gAXI6zSIr72T7/fgzmT4FHnTBsgrQBfYvTU0km5vxz86iADnAm0rRPTWFt7cXZccOJJcLAGHb2K9ekT93jmwmwwdAAFpjI6Ntbfxw5879ag7l6o1sr5eHHR3IsRgeQK/M4sQE+YEB7JcvEY6zAj45SWFgAPPxYwzHoQxIkQjTPT0kIxE+Noj8sexFn4/xnh58iQTeSpHkHAdrbIzi0BCOrmNPTpK/eJHM3bt8sCyKQCiR4NWePWSiUZw1+ZLXJm4pFKLhzBlCsRh2RUXacVgeGaF47RrL58+zcP8+RrmMkCQinZ1EL1zAjERqmkH+tLYl1G3bCJw4QUjT0IA0MJfLMX/5MqmHD0nZNiUgtGULG/r7ccXjINWuWbnmqsuFu7sb/4EDNLlcBIEioNs2KUAFGmMxmk6dQm1tRZI+3xBqEkiShBQOox05Ql1nJ26gvuIUAWiKQnj/ftStW5Fk+YuF+NldsbBA4cYN9KdPmaso8Fc62ZJtk7l1C2t0FGdxESHE1xE4hkHh6lX0oSHSpRIewC/LrPf7CSgKNpCamkI/fZr8pUuIZBIcpyaBunahPp1mub+fDyMjGKUSChCsq6Nh717q9u2jbnSU0uAgRrFIwTThyhUCqRS+hgZKLS1fJvDm87SNjZGcnsYUAjcQ8vsJ9/Xh7u1FDgRQN20iks3iDA+zZFmYhQLqzZtsj8WY3L0baY2Sf55ICCKpFHUzM2SEQAJCHg+hY8fQDh5EDgRWDoRC1J88SePRo2geD0XAcBy8b98Sv3ePYDZbbf2rFQjLIphMsmDbaEBQVQkePox26BCSz7e6i4bDrDt+nGYhmBscpFAskheC4Js3bPR4qHphFYEnlcI7P4/jdqNpGu8TCe4oCsXr1z//F2ga3+/cSfTJE0qmSVYIsKzaOZDcbjKyzFIiwfvt21kMBLA07YsetzWNd+3tLLW0sH5igvT8PH9Go/z44kX+E4LGjg7GDYOcy4XlOEgLC//5P/5LCFzxOPLmzWyIx+m6fduu7v0NVGqyTSycKksAAAAASUVORK5CYII=)}
+		.unchecked-box {list-style-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAAXNSR0IArs4c6QAAAAZiS0dEAP8A/wD/oL2nkwAAAAlwSFlzAAANOgAADMQBiN+4gQAAAAd0SU1FB9gKGQ8qAt8h3m8AAAAZdEVYdENvbW1lbnQAQ3JlYXRlZCB3aXRoIEdJTVBXgQ4XAAAA60lEQVRIx+2VsQqDMBRF70sCLg5OLoKgjk7+lJ/hh+STXBwcnRz8ArMEkrxOFktbaC3tULzTg5e8k5vADXDq70VbobXmvu/hvQczg4heHrJfXxQFuq67blZbMc8zpmlCXddIkgTOuZcBUko45zCOI6y1Nz2xFSEEZFmGOI7fGg4A3nsQEZqmuXOu9jallACAtm3fvmutNaIoAjM/dkBECCF89KCbk4eAb+kEnIAT8EsAM0OIz3hSyrssUvss8t5fg+uIrLXPs0gIgWVZYIyBUurQyYdheO4gz3NUVQVjDNZ1PfSjpWmKsixvehfB9GBZ3NndrgAAAABJRU5ErkJggg==)}
+		.migrated-box {list-style-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAABGdBTUEAALGPC/xhBQAAAAZiS0dEAP8A/wD/oL2nkwAAAAlwSFlzAAANOgAADMQBiN+4gQAAAAd0SU1FB+AKHREFA8vJSnkAAAAZdEVYdENvbW1lbnQAQ3JlYXRlZCB3aXRoIEdJTVBXgQ4XAAAC1klEQVRIx+2VT0hUURTGf/e958w4Tc3TYowMw1GyEgwr1MqsFmbZIrIWQZsWJUjbdoHQpl3Qps0swnCRECQFYkR/TC1iKkqmfzAKTo2Vf8hoRsfR995tkRMT87RRWkUHHhy495zvnvvu933wP/75EKkkEAjIYDCIaZpIKRFCZN0kfX9xcTGtra2/irVUEolECIfDlJeXo+s6hmFkDaCqKoZhEAqFSCaTv60pqcSyLAoLC/F4PEtqDmCaJkIIKisrMybX0sdUVRWA5ubmPzdNjjI1cpXkZC/O1fV03PXgdDqRUtpPIITAsqxsDz0Z/3CZQv8uqo4N4C8/Tp2/DdM0MiZQlvk41OTkI/LW1SGtCVb5drD3eCc71wcA+VcAHA5vDd8+3UGakxiJV7i9pdQevU5T1R35pJ3MV5QW1pf+0kWBheJ2SWua8EQXZXsu4fVVYEz1sEKvof5EuxjoPvzpcRvrdp9C2gGMx6cpOHBmbImMesds7BZubwMVDTfXDnQ3vQfK7AC8wLfExMX5whyQc3q2OEnjGm5vE76SQxsfBLr77a7CNf+n0r/l6sSMtsBSnurckiIILCobAtVZhpF4gZF4jubaymj4Ch/fd380LE7bAnjc0NPxk2yqpmEuwGxF0ag+0k5uTpzZeBeaazvj0We8fXojainsb2xh2BZgbe0gSIllzSIUh63wfQ6dZ/O2fbjcKlOj58jJ3cVENESw5yErc9nf2MLQ4jwQAkV1Lqiq37/cZ9WaahJjF9AcmxiPDhLs7ePe23oOnmUwg2hSShQle96tKDjA2HAniusgo9FxnvY9Jxw7RWzGYy92QghM00x5g53qp9sHmtB58/o2umOI2NwGolMnMYUHIb7aAyiKwsjICLqu2/qBEIKUUAohMaSHSLyBSMoPTINQ6CX5+fn2AEVFRZSUlBCPx4nFYhl3L4RESjF/GEgX3pSj+Xw+/H7/b3U/AEOZFnp7O5+5AAAAAElFTkSuQmCC)}
+		ul {list-style-image: none}
+		/* ul rule needed to reset style for sub-bullets */
+
+	</style>
+</head>
+
+<body>
+    <div id="header">
+        <h2><a href="/index.html">Sylvia's Bookshelf</a></h1>
+    </div>
+	<div class="wrapper">
+		<div id="navigation"> <ul>
+<li><a href="../index.html" title="Public" class="page">Public</a>
+<ul>
+<li><a href="./About_Me.html" title="About Me" class="page">About Me</a></li>
+<li><b>Bare Hello World in C</b></li>
+<li><a href="./Calling_conventions.html" title="Calling conventions" class="page">Calling conventions</a></li>
+<li><a href="./Minimal_Syscalls_in_C.html" title="Minimal Syscalls in C" class="page">Minimal Syscalls in C</a></li>
+<li><a href="./中文词.html" title="中文词" class="page">中文词</a></li>
+</ul></li>
+</ul>
+ </div>
+		<div id="content">
+			<h1>Bare Hello World in C <a name='Public:Bare Hello World in C'></a></h1>
+
+			<p>
+Created Sunday 28 July 2024
+</p>
+<br>
+<p>
+The basic "Hello world" program in C that everyone knows is like this:
+</p>
+<div class="zim-object">
+<pre><code class="c">#include &lt;stdio.h&gt;
+
+int main(void)
+{
+  printf("Hello, world!\n");
+  return 0;
+}
+</code></pre>
+</div>
+<br>
+<div class="zim-object">
+<pre><code class="diff">$ gcc -Oz main.c &amp;&amp; strip a.out &amp;&amp; ./a.out
+Hello, world!
+$ ldd a.out
+	linux-vdso.so.1 (0x0000747611e1f000)
+	libc.so.6 =&gt; /usr/lib/libc.so.6 (0x0000747611bfc000)
+	/lib64/ld-linux-x86-64.so.2 =&gt; /usr/lib64/ld-linux-x86-64.so.2 (0x0000747611e21000)
+</code></pre>
+</div>
+<br>
+<p>
+This results in a 15K binary that depends on <tt>libc</tt>.
+</p>
+<br>
+<p>
+I am Zig programmer as well. When we compile a hello world with Zig, we get a 4.8K binary:
+</p>
+<br>
+<div class="zim-object">
+<pre><code class="zig">const std = @import("std");
+
+pub fn main() !void {
+    try std.io.getStdOut().writer().writeAll("Hello, world!\n");
+}
+</code></pre>
+</div>
+<br>
+<div class="zim-object">
+<pre><code class="diff">$ zig build run -Doptimize=ReleaseSmall
+Hello, world!
+$ ldd ./zig-out/bin/zigtest0
+	not a dynamic executable
+</code></pre>
+</div>
+<br>
+<p>
+And, not to mention, it isn't even linked to <tt>libc</tt>! What gives?
+</p>
+<br>
+<p>
+Well, there are a couple of drawbacks in Zig. By default, Zig does not enable PIE by default, while that seems to be the case for the C program. So, we'll enable that in the <tt>build.zig</tt>. Next, <tt>checksec</tt> says theres no stack canaries. It also doesn't say there are stack canaries for the C program, for that matter, however I suspect that is because our C program only actually has the main function that calls off to <tt>printf</tt>, while Zig must have many more functions of its own. But, at the moment, in order to enable stack canaries in Zig, you must both link <tt>libc</tt> and compile with a safe optimization mode like <tt>ReleaseSafe</tt>.
+</p>
+<br>
+<p>
+Enabling all of that for the Zig compiler brings us up all the way to... 78K ...what? Compiling with the same settings except without <tt>libc</tt> brings that down to 17K, and 6K on <tt>ReleaseSmall</tt>. It seems that linking <tt>libc</tt> is adding a boatload of extra stuff.
+</p>
+<br>
+<p>
+So, I tried static linking <tt>libc</tt> in the hopes that it would be able to optimize out a lot of the <tt>libc</tt> code while also having stack protectors. 
+</p>
+<br>
+<p>
+<tt>glibc</tt> didn't like static linking, according to the Zig compiler:
+</p>
+<div class="zim-object">
+<pre><code class="diff">$ zig build run -Dtarget="x86_64-linux-gnu" -Doptimize=ReleaseSafe
+run
+└─ run zigtest0
+   └─ zig build-exe zigtest0 ReleaseSafe x86_64-linux-gnu failure
+error: error: libc of the specified target requires dynamic linking
+</code></pre>
+</div>
+<br>
+<p>
+So then I tried with <tt>musl</tt>, and that compiled. But <tt>checksec</tt> still reports no stack canaries!
+</p>
+<br>
+<p>
+That's fine, I guess. We don't <i>need</i> to put down stack canaries. I guess. And so, if that is the case, then we'll just go for the <tt>ReleaseSmall</tt> PIE no-<tt>libc</tt> version. Which is 6K, and still a lot less than the C program. As a side note, <tt>gcc</tt> <i>does</i> seem to be able to statically include <tt>glibc</tt>. But, whatever.
+</p>
+<br>
+<p>
+Zig's standard library is made to be <tt>libc</tt>-optional. It works with it, and it works without it. Zig takes advantage of that by, instead of using <tt>libc</tt> as is standard for many other compilers in the programming world, using their standard library as a replacement for <tt>libc</tt>, handling all of the necessary startup code that you might normally rely on <tt>libc</tt> for.
+</p>
+<br>
+<p>
+But C is supposed to be the small and low level language language! Where you have control over everything!? Why is Zig, the fancy new modern kid on the block doing so much better out of the gate?
+</p>
+<br>
+<p>
+Well, that's because <tt>libc</tt> tends to be the default, and defaults aren't always the best or good.
+</p>
+<br>
+<p>
+Alright, so Zig does it better at first. But we're C, the low level programming language that can control everything. Can't we do the same, if not better?
+</p>
+<br>
+<p>
+In the Zig standard library, they directly use syscalls. And, in fact, looking at the Zig program's <tt>objdump -D</tt>, all of the syscalls used in the program appear to have ended up inlined directly.
+</p>
+<br>
+<p>
+So, let's try to do the same:
+</p>
+<br>
+<div class="zim-object">
+<pre><code class="c">#include &lt;unistd.h&gt;
+
+int main(void)
+{
+  write(STDOUT_FILENO, "Hello, world!\n", 14);
+  return 0;
+}
+</code></pre>
+</div>
+<br>
+<div class="zim-object">
+<pre><code class="diff">$ gcc -Oz main.c &amp;&amp; strip a.out &amp;&amp; ./a.out
+Hello, world!
+</code></pre>
+</div>
+<br>
+<p>
+...and it still compiled down to 15K. We are still technically using <tt>libc</tt>, as we're actually using <tt>libc</tt>'s syscall wrappers to do everything, and so <tt>libc</tt> is still doing everything else, including the startup code.
+</p>
+<br>
+<p>
+So, we simply must write our own startup code. And our own syscall wrapper.
+</p>
+<br>
+<div class="zim-object">
+<pre><code class="c">typedef unsigned long ulong;
+
+__asm__ (
+  /* For the first three arguments in the C calling convention, they actually
+   * line up with the first three arguments for syscalls, therefore we don't
+   * need to move anything around, other than the syscall ID. */
+  ".globl _sysc1\n"
+  ".globl _sysc3\n"
+  "_sysc3:\n" 
+  "mov %rcx, %rax\n"
+  "syscall\n"
+  "ret\n"
+  "_sysc1:\n"
+  "mov %rsi, %rax\n"
+  "syscall\n"
+  "ret\n"
+  );
+
+ulong _sysc3(ulong a, ulong b, ulong c, ulong id);
+ulong _sysc1(ulong a, ulong id);
+
+/* Referenced https://github.com/ziglang/zig/blob/c15755092821c5c27727ebf416689084eab5b73e/lib/std/os/linux/syscalls.zig#L453 */
+#define SYS_WRITE 1
+#define SYS_EXIT  60
+
+#define STDOUT_FILENO 1
+
+void _start(void)
+{
+  _sysc3(STDOUT_FILENO, (ulong)"Hello, world!\n", 14, SYS_WRITE);
+  _sysc1(0, SYS_EXIT);
+}
+</code></pre>
+</div>
+<br>
+<p>
+Now, that should be pretty small, right? All this is, is a <tt>"Hello, world!\n"</tt> string stored somewhere, two function calls, and two syscall definitions.
+</p>
+<br>
+<div class="zim-object">
+<pre><code class="diff">gcc -Oz -fno-builtin -nostdlib -ffreestanding -Wl,--no-dynamic-linker -no-pie -fno-stack-protector main.c &amp;&amp; strip a.out &amp;&amp; ./a.out
+Hello, world!
+</code></pre>
+</div>
+<br>
+<p>
+And this comes out to... 8.8K. Still larger than Zig, but it is doing a lot better. In fact, the only executable code is this:
+</p>
+<br>
+<div class="zim-object">
+<pre><code class="diff">0000000000401000 &lt;.text&gt;:
+  401000:       48 89 c8                mov    %rcx,%rax
+  401003:       0f 05                   syscall
+  401005:       c3                      ret
+  401006:       48 89 f0                mov    %rsi,%rax
+  401009:       0f 05                   syscall
+  40100b:       c3                      ret
+  40100c:       50                      push   %rax
+  40100d:       48 8d 35 ec 0f 00 00    lea    0xfec(%rip),%rsi        # 0x402000
+  401014:       6a 01                   push   $0x1
+  401016:       59                      pop    %rcx
+  401017:       6a 0e                   push   $0xe
+  401019:       5a                      pop    %rdx
+  40101a:       6a 01                   push   $0x1
+  40101c:       5f                      pop    %rdi
+  40101d:       e8 de ff ff ff          call   0x401000
+  401022:       6a 3c                   push   $0x3c
+  401024:       31 ff                   xor    %edi,%edi
+  401026:       5e                      pop    %rsi
+  401027:       5a                      pop    %rdx
+  401028:       e9 d9 ff ff ff          jmp    0x401006
+
+</code></pre>
+</div>
+<br>
+<p>
+That itself is only <i>45 bytes</i>. And the <tt>.rodata</tt> section takes up only another 14. So then why is the entire thing 8984 bytes?
+</p>
+<br>
+<p>
+Looking at <tt>readelf -a</tt> for both of the programs, it is strange, because Zig has even more program headers and sections. Then, I noticed something: <tt>gcc</tt> seems to be aligning the offsets of each of the program headers to its correpsonding alignment. However, Zig is not doing that.
+</p>
+<br>
+<p>
+C program:
+</p>
+<div class="zim-object">
+<pre><code class="c">Program Headers:
+  Type           Offset             VirtAddr           PhysAddr
+                 FileSiz            MemSiz              Flags  Align
+  LOAD           0x0000000000000000 0x0000000000400000 0x0000000000400000
+                 0x0000000000000254 0x0000000000000254  R      0x1000
+  LOAD           0x0000000000001000 0x0000000000401000 0x0000000000401000
+                 0x000000000000002d 0x000000000000002d  R E    0x1000
+  LOAD           0x0000000000002000 0x0000000000402000 0x0000000000402000
+                 0x0000000000000058 0x0000000000000058  R      0x1000
+  NOTE           0x0000000000000200 0x0000000000400200 0x0000000000400200
+                 0x0000000000000030 0x0000000000000030  R      0x8
+  NOTE           0x0000000000000230 0x0000000000400230 0x0000000000400230
+                 0x0000000000000024 0x0000000000000024  R      0x4
+  GNU_PROPERTY   0x0000000000000200 0x0000000000400200 0x0000000000400200
+                 0x0000000000000030 0x0000000000000030  R      0x8
+  GNU_EH_FRAME   0x0000000000002010 0x0000000000402010 0x0000000000402010
+                 0x0000000000000014 0x0000000000000014  R      0x4
+  GNU_STACK      0x0000000000000000 0x0000000000000000 0x0000000000000000
+                 0x0000000000000000 0x0000000000000000  RW     0x10
+</code></pre>
+</div>
+<br>
+<p>
+Zig program:
+</p>
+<div class="zim-object">
+<pre><code class="zig">Program Headers:
+  Type           Offset             VirtAddr           PhysAddr
+                 FileSiz            MemSiz              Flags  Align
+  PHDR           0x0000000000000040 0x0000000000000040 0x0000000000000040
+                 0x00000000000001f8 0x00000000000001f8  R      0x8
+  LOAD           0x0000000000000000 0x0000000000000000 0x0000000000000000
+                 0x0000000000000968 0x0000000000000968  R      0x1000
+  LOAD           0x0000000000000968 0x0000000000001968 0x0000000000001968
+                 0x00000000000006d1 0x00000000000006d1  R E    0x1000
+  LOAD           0x0000000000001040 0x0000000000003040 0x0000000000003040
+                 0x00000000000002a0 0x0000000000000fc0  RW     0x1000
+  LOAD           0x00000000000012e0 0x00000000000042e0 0x00000000000042e0
+                 0x0000000000000004 0x0000000000000041  RW     0x1000
+  DYNAMIC        0x0000000000001200 0x0000000000003200 0x0000000000003200
+                 0x00000000000000e0 0x00000000000000e0  RW     0x8
+  GNU_RELRO      0x0000000000001040 0x0000000000003040 0x0000000000003040
+                 0x00000000000002a0 0x0000000000000fc0  R      0x1
+  GNU_EH_FRAME   0x0000000000000708 0x0000000000000708 0x0000000000000708
+                 0x0000000000000064 0x0000000000000064  R      0x4
+  GNU_STACK      0x0000000000000000 0x0000000000000000 0x0000000000000000
+                 0x0000000000000000 0x0000000001000000  RW     0x0
+
+</code></pre>
+</div>
+<br>
+<p>
+Zig's highest offset only goes up to <tt>0x12e0</tt>, or 4832 bytes. The C program's highest offset is <tt>0x2010</tt>, or 8208 bytes. Those numbers seem proportional to the actual binary sizes.
+</p>
+<br>
+<p>
+The reason for the C program's size seems to be that they are forcing the offsets to be aligned, while Zig takes advantage of not needing to, it seems. So, is there a way to un-align our C program's program header offsets?
+</p>
+<br>
+<p>
+I thought maybe it had something to do with Zig using LLVM and GCC not using LLVM, so I tried compiling with Clang, but that only reduced it by 300 bytes, and the program header offsets were still aligned.
+</p>
+<br>
+<p>
+We're not out of luck though: we still have the option of writing a linker script. And with that, we should be able to explicitly specify the alignment of the program sections.
+</p>
+<br>
+<div class="zim-object">
+<pre><code class="diff">ENTRY(_start);
+SECTIONS
+{
+  . = 0x10000 + SIZEOF_HEADERS;
+  .text ALIGN(16) (READONLY) :
+  {
+    *(.text)
+    *(.text*)
+  }
+  .rodata ALIGN(16) (READONLY) :
+  {
+    *(.rodata)
+    *(.rodata*)
+  }
+}
+
+</code></pre>
+</div>
+<br>
+<p>
+With this, it is no longer constrained to <tt>0x1000</tt> alignment. And, surprisingly, we beat Zig.
+</p>
+<br>
+<div class="zim-object">
+<pre><code class="diff">$ gcc -g -Oz -fno-builtin -nostdlib -ffreestanding -Wl,--no-dynamic-linker -no-pie -fno-stack-protector -T linker.ld main.c &amp;&amp; strip a.out &amp;&amp; ./a.out
+Hello, world!
+</code></pre>
+</div>
+<br>
+<p>
+This binary executable is a mere 1384 bytes, about 5 times smaller than our 6K Zig binary.
+</p>
+<br>
+<p>
+Of course, we also need appropriate Zig reference. Our original example is no longer as valid, since we're not using PIE and just doing a single <tt>write</tt> syscall (which is technically not correct; the correct way to do it would be to repeat it until it has successfully transmitted all of your data, but we'll rely on the syscall on Linux tending to work the first time anyway).
+</p>
+<br>
+<div class="zim-object">
+<pre><code class="zig">const std = @import("std");
+
+pub export fn _start() void {
+    _ = std.os.linux.write(std.os.linux.STDOUT_FILENO, "Hello, world!\n", 14);
+    std.os.linux.exit(0);
+}
+</code></pre>
+</div>
+<br>
+<br>
+<br>
+<p>
+And the result is...!
+</p>
+<br>
+<p>
+Zig still beats us at 1032 bytes. That was honestly quite funny when I saw that.
+</p>
+<br>
+<p>
+But, remember, this is only by 352 bytes. That's not a lot of data. Let's directly compare the sections:
+</p>
+<br>
+<ul>
+<li><tt>.text</tt> Zig is 19 bytes smaller.</li>
+<li><tt>.rodata</tt> is the same. (side note: I wonder if you can chop off a byte by getting rid of the null terminator.)</li>
+<li><tt>.eh_frame</tt> C is 36 bytes smaller.</li>
+<li><tt>.eh_frame_hdr</tt> C is 8 bytes smaller.</li>
+<li><tt>.comment</tt> Zig is 8 bytes smaller.</li>
+<li><tt>.shstrtab</tt> Zig is 38 bytes smaller.</li>
+<li>And C has additional sections <tt>.note.gnu.property</tt> and <tt>.note.gnu.build-id</tt>, respectively taking up 48 bytes and 36 bytes.</li>
+</ul>
+<br>
+<p>
+At the very least, this accounts for 105 of those bytes. The C program also has more section headers, and more program headers, so those probably take up some space as well. We are also forcing alignment by 16, which is not necessary, and some bytes may be being lost to that.
+</p>
+<br>
+<div class="zim-object">
+<pre><code class="diff">ENTRY(_start);
+SECTIONS
+{
+  . = 0x10000 + SIZEOF_HEADERS;
+  .text ALIGN(1) (READONLY) :
+  {
+    *(.text)
+    *(.text*)
+  }
+  .rodata ALIGN(1) (READONLY) :
+  {
+    *(.rodata)
+    *(.rodata*)
+  }
+  /DISCARD/ :
+  {
+    *(.note.gnu.property)
+    *(.note.gnu.build-id)
+  }
+}
+
+</code></pre>
+</div>
+<br>
+<div class="zim-object">
+<pre><code class="diff">$ gcc -g -Oz -fno-builtin -nostdlib -ffreestanding -Wl,--no-dynamic-linker -Wl,--build-id=none -no-pie -fno-stack-protector -T linker.ld main.c &amp;&amp; strip a.out &amp;&amp; ./a.out
+Hello, world!
+</code></pre>
+</div>
+<br>
+<br>
+<p>
+So, removing those two additional sections and changing alignment from 16 to 1, we end up with 960 bytes. We beat Zig! For now. I'm sure if I tried for longer, I could get the Zig program to take up a comparable amount of space, but I think this is enough to show how small C can actually get if you get rid of the bloat.
+</p>
+<br>
+
+
+			<br>
+			<span class="backlinks">
+			</span>
+
+			
+		</div>
+	</div>
+</body>
+</html>
